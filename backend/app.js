@@ -4,6 +4,7 @@ import {notFound,errorHandler} from "./midlewares/error.js";
 dotenv.config()
 
 const app = express()
+app.use(express.json())
 
 import cors from  'cors'
 app.use(cors({
@@ -13,12 +14,16 @@ app.use(cors({
 
 }))
 
+
 app.get('/', (req, res) => {
     res.send("testing")
 })
 
 import productRoute from "./Rout/productRoute.js"
+import userRoute from "./Rout/userRoutes.js"
 app.use("/api/v1", productRoute)
+app.use("/api/v1", userRoute)
+
 
 app.use(notFound);
 app.use(errorHandler);
