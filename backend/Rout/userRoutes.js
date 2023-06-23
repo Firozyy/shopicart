@@ -1,10 +1,14 @@
 import express from "express";
-import { getProduct, getProducts } from "../controler/productControler.js";
-import { authUser } from "../controler/userControler.js";
+
+import { GetUserprofile, authUser, registerUser } from "../controler/userControler.js";
+import { protect } from "../midlewares/authMidleware.js";
 
 const router = express.Router();
 
-router.route('/login').post(authUser);
+router.route('/user/login').post(authUser);
+router.route('/user').post(registerUser)
+router.route('/user/profile').get(protect,GetUserprofile);
+
 
 
 
