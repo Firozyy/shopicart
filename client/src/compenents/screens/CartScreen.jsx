@@ -1,12 +1,13 @@
 
 import { React, useEffect } from 'react'
-import { Row, Form, Col, ListGroup, Image,  Button, Container, Card, ListGroupItem } from "react-bootstrap"
+import { Row, Form, Col, ListGroup, Image, Button, Container, Card, ListGroupItem } from "react-bootstrap"
 import { useSelector, useDispatch } from 'react-redux';
 import { addtocart, removeFromCart } from '../../redux/action/cartAction';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import Message from '../Message';
-const CartScreen = () => {
+const CartScreen = ({ match, location, history }) => {
   const navigate = useNavigate()
+  const { userInfo } = useSelector(state => state.userLogin)
   const { cartItems } = useSelector(state => state.cart)
 
   const { id } = useParams()
@@ -24,13 +25,19 @@ const CartScreen = () => {
   }, [dispatch, id, qty])
 
   const removeFromCartHandler = (id) => {
-    dispatch (removeFromCart(id))
+    dispatch(removeFromCart(id))
 
   }
 
   const checkOutHandler = () => {
-    
-    navigate(`/login?redirect=shipping`);
+    console.log(userInfo);
+    if (!userInfo) {
+      navigate("/login")
+    }
+    else {
+      navigate("/shipping")
+    }
+
   }
   return (
     <Container className='screenSize '>
