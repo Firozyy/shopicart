@@ -21,8 +21,10 @@ app.get('/', (req, res) => {
 
 import productRoute from "./Rout/productRoute.js"
 import userRoute from "./Rout/userRoutes.js"
+import orderRoute from "./Rout/orderRoutes.js"
 app.use("/api/v1", productRoute)
 app.use("/api/v1", userRoute)
+app.use("/api/v1", orderRoute)
 
 
 app.use(notFound);

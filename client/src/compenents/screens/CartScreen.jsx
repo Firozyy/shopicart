@@ -5,7 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addtocart, removeFromCart } from '../../redux/action/cartAction';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import Message from '../Message';
+
+
 const CartScreen = ({ match, location, history }) => {
+
   const navigate = useNavigate()
   const { userInfo } = useSelector(state => state.userLogin)
   const { cartItems } = useSelector(state => state.cart)
@@ -30,7 +33,7 @@ const CartScreen = ({ match, location, history }) => {
   }
 
   const checkOutHandler = () => {
-    console.log(userInfo);
+  
     if (!userInfo) {
       navigate("/login")
     }
