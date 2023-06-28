@@ -13,6 +13,8 @@ import ShippingScreen from './compenents/screens/ShippingScreen';
 import PaymentScreen from './compenents/screens/PaymentScreen';
 import Placerder from './compenents/screens/Placerder';
 import OrderScreen from './compenents/screens/OrderScreen';
+
+import Success from './compenents/screens/Success';
 const App = () => {
   return (
     <Roter>
@@ -30,9 +32,11 @@ const App = () => {
 
         <Route path='/order/:id' element={<OrderScreen />} exact />
         
+   
+        <Route path='/paymentsuccess' element={<Success/>} exact />
+        
 
-
-
+        Tests
 
 
 

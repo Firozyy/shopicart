@@ -1,84 +1,47 @@
-import axios from 'axios';
 
-import React, { useEffect, } from 'react'
-import { Link, useParams, } from "react-router-dom"
-import { Button, Row, Col, Container, ListGroup, ListGroupItem, Image, Card } from "react-bootstrap"
-import { useSelector, useDispatch } from 'react-redux';
-import Loader from '../Loader';
-import Message from "../Message"
-import { getorderDetails } from '../../redux/action/orderActions';
+import React, { useEffect } from 'react'
+import { Card, Col, Container, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useSearchParams } from "react-router-dom"
+import { getorderDetails, payOrder } from '../../redux/action/orderActions'
+import Message from '../Message'
+import Loader from '../Loader'
 
-const OrderScreen = () => {
-    const { id } = useParams()
+const Success = () => {
     const dispatch = useDispatch()
+    const seachQuery = useSearchParams()[0]
+
+    const referenceNum = seachQuery.get("reference")
+
+    useEffect(() => {
+        dispatch(payOrder(referenceNum))
+
+
+        dispatch(getorderDetails(referenceNum))
+
+
+    }, [dispatch, referenceNum,])
 
 
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
-    let itemsPrice;
-    if (!loading) {
-        const addDecimals = (num) => {
-            return (Math.round(num * 100) / 100).toFixed(2)
-        }
-
-        itemsPrice = addDecimals(
-            order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-        );
-    }
+    console.log(order);
+    const orderPay = useSelector(state => state.orderPay)
+    const { loading: loadingPay, success: successPay } = orderPay
 
 
 
 
-    useEffect(() => {
-        dispatch(getorderDetails(id))
-    }, [dispatch, id])
-
-
-
-
-
-
-    //pyamant
-    const { userInfo } = useSelector(state => state.userLogin)
-
-    const checkoutHandler = async (amount, orderId) => {
-
-
-        const { data } = await axios.post("http://localhost:8080/api/v1/checkout", {
-            amount
-        })
-
-        const options = {
-            key: "rzp_test_0xa532o86yAcos",
-            amount: data.order.amount,
-            currency: "INR",
-            name: "Shopicart",
-            description: "Tutorial of RazorPay",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWKBVR7dSCaDrMbCogcL0PTxvHjMinJgwgo4ybqt4&s",
-            order_id: data.order.id,
-            callback_url: `http://localhost:8080/api/v1/paymentverification/${orderId}`,
-            prefill: {
-                name: userInfo.name,
-                email: userInfo.email,
-
-            },
-            notes: {
-                "address": "Razorpay Corporate Office"
-            },
-            theme: {
-                "color": "#121212"
-            }
-        };
-        const razor = new window.Razorpay(options);
-        razor.open();
-    }
 
     return (
         <Container className='screenSize'>
             {loading ? <Loader /> : error ? <Message variant="dander">{error}</Message> :
 
                 <>
-                    <h1>order {order._id}</h1>
+               
+                <h1 className='text-success'>Paymant success {order._id}</h1>
+                    
+                    <h3>ORDER PLACED</h3>
                     <Row>
                         <Col md={8}>
                             <ListGroup variant='flush'>
@@ -100,22 +63,9 @@ const OrderScreen = () => {
                                         {order.shippingAddress.postalCode},
                                         {order.shippingAddress.country},
                                     </p>
-                                    {order.isDelivered ? (
-                                        <Message variant='success'>
-                                            Delivered on {order.deliveredAt}
-                                        </Message>
-                                    ) : (
-                                        <Message variant='danger'>Not Delivered</Message>
-                                    )}
+                                   
                                 </ListGroupItem>
-                                <ListGroupItem>
-                                    <h2>Payment Method</h2>
-                                    <p>
-                                        <strong>Method: </strong>
-                                        {order.paymentMethod}
-                                    </p>
-
-                                </ListGroupItem>
+                         
 
                                 <ListGroupItem>
                                     <h2>Order items</h2>
@@ -158,7 +108,7 @@ const OrderScreen = () => {
                                     <ListGroup.Item>
                                         <Row>
                                             <Col>Items</Col>
-                                            <Col>₹{itemsPrice}</Col>
+                                            <Col>₹{order.totalPrice - order.shippingPrice - order.taxPrice}</Col>
                                         </Row>
                                     </ListGroup.Item>
                                     <ListGroup.Item>
@@ -182,7 +132,6 @@ const OrderScreen = () => {
 
 
                                 </ListGroup>
-                                <Button onClick={() => checkoutHandler(order.totalPrice, order._id)}>pay</Button>
                             </Card>
                         </Col>
                     </Row>
@@ -193,4 +142,7 @@ const OrderScreen = () => {
     )
 }
 
-export default OrderScreen
+
+export default Success
+
+

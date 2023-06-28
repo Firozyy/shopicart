@@ -1,16 +1,18 @@
 import express from "express"
 import dotenv from "dotenv"
-import {notFound,errorHandler} from "./midlewares/error.js";
+import { notFound, errorHandler } from "./midlewares/error.js";
 dotenv.config()
 
 const app = express()
 app.use(express.json())
-
-import cors from  'cors'
+app.use(express.urlencoded({
+    extended: true
+}));
+import cors from 'cors'
 app.use(cors({
-    origin:process.env.Frontend_Url,
-    credentials:true,
-    methods:["GET","POST","DELETE","PUT",]
+    origin: process.env.Frontend_Url,
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "PUT",]
 
 }))
 
