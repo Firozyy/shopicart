@@ -1,6 +1,7 @@
 import Order from "../Model/OrderModel.js"
 import asyncHandler from "express-async-handler"
 import { Payment } from "../Model/paymentModel.js";
+import Product from "../Model/ProductModel.js";
 
 
 //@desc CreateNewOrder
@@ -85,6 +86,14 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
 
 })
 
+//@desc get loged user all orders
+// rout http://localhost:8080/api/v1/orders/allOrders
+// private
 
 
+export const allOrders = asyncHandler(async (req, res) => {
+   const logedUserId =req.user._id
 
+    const order = await Order.find({user:logedUserId});
+    res.json(order)
+})

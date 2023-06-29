@@ -12,10 +12,12 @@ const OrderScreen = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
 
-
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
+    const { userInfo } = useSelector(state => state.userLogin)
+
     let itemsPrice;
+
     if (!loading) {
         const addDecimals = (num) => {
             return (Math.round(num * 100) / 100).toFixed(2)
@@ -26,20 +28,13 @@ const OrderScreen = () => {
         );
     }
 
-
-
-
     useEffect(() => {
         dispatch(getorderDetails(id))
     }, [dispatch, id])
 
 
-
-
-
-
     //pyamant
-    const { userInfo } = useSelector(state => state.userLogin)
+
 
     const checkoutHandler = async (amount, orderId) => {
 
@@ -182,7 +177,8 @@ const OrderScreen = () => {
 
 
                                 </ListGroup>
-                                <Button onClick={() => checkoutHandler(order.totalPrice, order._id)}>pay</Button>
+                                { !order.isPaid && (  <Button onClick={() => checkoutHandler(order.totalPrice, order._id)}>pay</Button>)}
+                              
                             </Card>
                         </Col>
                     </Row>

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const orderSchema =  mongoose.Schema({
+const orderSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -100,12 +100,13 @@ const orderSchema =  mongoose.Schema({
         required: true,
         default: false
     },
-      deliverdAt: {
+    deliverdAt: {
         type: Date
     },
-}
-    , { timeseries: true });
+},
+    { timestamps: true }
+);
 
- const Order = mongoose.model("order", orderSchema);
+const Order = mongoose.model("order", orderSchema);
 
- export default Order
+export default Order

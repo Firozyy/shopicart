@@ -62,18 +62,6 @@ export const payOrder = (orderId) => async (
       type: "ORDER_PAY_REQUEST",
     })
 
-
-
-    // const { data } = await axios.put(
-    //   `${server}/order/${orderId}/pay`, {
-    //   headers: {
-    //     "Content-Type": 'application/json',
-    //     authrization: `Bearer  ${userInfo.token}  `
-    //   },
-    //   withCredentials: true,
-
-    // })
-    console.log(orderId);
     const order={ 
       orderId
     }
@@ -95,6 +83,41 @@ export const payOrder = (orderId) => async (
 
     dispatch({
       type: "ORDER_PAY_FAIL",
+      payload: error.response && error.response.data.message ?
+        error.response.data.message : error.message
+    })
+  }
+}
+
+
+
+export const listMyOrders = () => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: "MY_ORDERS_REQUEST",
+    })
+
+    const {userLogin :{userInfo}} = getState()
+    const { data } = await axios.get(`${server}/orders/allOrders`,{
+        headers: {
+            "Content-Type": 'application/json',
+            authrization:`Bearer ${userInfo.token}  `
+        },
+        withCredentials: true,
+
+    });
+
+    dispatch({
+      type: "MY_ORDERS_SUCCESS",
+      payload: data,
+    })
+  } catch (error) {
+
+    dispatch({
+      type: "MY_ORDERS_FAIL",
       payload: error.response && error.response.data.message ?
         error.response.data.message : error.message
     })
