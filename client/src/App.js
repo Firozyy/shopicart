@@ -15,11 +15,17 @@ import Placerder from './compenents/screens/Placerder';
 import OrderScreen from './compenents/screens/OrderScreen';
 
 import Success from './compenents/screens/Success';
+import UserListSCreen from './compenents/screens/UserListSCreen';
+import UserEditScreen from './compenents/screens/UserEditScreen';
+import ProductListScreen from './compenents/screens/ProductListScreen';
+import ProdictEditScreen from './compenents/screens/ProdictEditScreen';
+import Notfound from './compenents/screens/Notfound';
 const App = () => {
   return (
     <Roter>
       <Header />
       <Routes>
+      <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Home />} exact />
         <Route path='/product/:id' element={<ProductScreen />} exact />
         <Route path='/cart/:id?' element={<CartScreen />} exact />
@@ -34,10 +40,13 @@ const App = () => {
         
    
         <Route path='/paymentsuccess' element={<Success/>} exact />
+        <Route path='/admin/userList' element={<UserListSCreen/>} exact />
+        <Route path='/admin/user/:id/edit' element={<UserEditScreen/>} exact />
+
+        <Route path='/admin/productList' element={<ProductListScreen/>} exact />
+        <Route path='/admin/product/:id/edit' element={<ProdictEditScreen/>} exact />
         
-
-        Tests
-
+      
 
 
       </Routes>

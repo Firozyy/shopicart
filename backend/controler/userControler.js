@@ -108,3 +108,93 @@ export const updateUserprofile = asyncHandler(async (req, res) => {
 
 
 })
+
+
+//@desc get all users
+// rout http://localhost:8080/api/v1/admin/users
+// private/adminONLY
+
+export const getUsers = asyncHandler(async (req, res) => {
+
+    const user = await User.find()
+    if (!user) {
+        res.status(404)
+        throw new Error('User Not Found')
+    } else {
+        res.json(user)
+    }
+
+})
+
+
+//@desc delteUser
+// rout http://localhost:8080/api/v1/admin/user/:id
+// private/adminONLY
+
+export const deleteUser = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    const user = await User.findById(id)
+    if (!user) {
+        res.status(404)
+        throw new Error('User Not Found')
+    } else {
+        await await user.deleteOne({ id });
+        res.json({
+            message: 'user removed successfully'
+        })
+    }
+
+})
+
+
+
+//@desc getsingluser
+// rout http://localhost:8080/api/v1/admin/user/:id
+// private/adminONLY
+
+export const getuserbyid = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    const user = await User.findById(id).select("-password")
+    if (!user) {
+        res.status(404)
+        throw new Error('User Not Found')
+    } else {
+
+        res.json(user)
+
+
+    }
+
+})
+
+
+
+//@desc updateUsers
+// rout http://localhost:8080/api/v1/admin/user/:id
+// admib
+export const updateUsers = asyncHandler(async (req, res) => {
+    const { id } = req.params
+    const user = await User.findById(id)
+    if (user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        user.isAdmin = req.body.isAdmin || user.isAdmin
+
+    }
+
+    const updatedUser = await user.save()
+    if (updatedUser) {
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+
+        })
+    } else {
+        res.status(404)
+        throw new Error('User Not Found')
+    }
+
+
+})

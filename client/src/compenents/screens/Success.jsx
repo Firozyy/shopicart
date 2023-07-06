@@ -6,6 +6,7 @@ import { Link, useSearchParams } from "react-router-dom"
 import { getorderDetails, payOrder } from '../../redux/action/orderActions'
 import Message from '../Message'
 import Loader from '../Loader'
+import { removeFromCart } from '../../redux/action/cartAction'
 
 const Success = () => {
     const dispatch = useDispatch()
@@ -13,24 +14,25 @@ const Success = () => {
 
     const referenceNum = seachQuery.get("reference")
 
+    const orderDetails = useSelector(state => state.orderDetails)
+    const { order, loading, error } = orderDetails
+
+    const orderPay = useSelector(state => state.orderPay)
+    const { loading: loadingPay, success: successPay } = orderPay
+
     useEffect(() => {
         dispatch(payOrder(referenceNum))
 
 
         dispatch(getorderDetails(referenceNum))
+    
 
-
-    }, [dispatch, referenceNum,])
-
-
-    const orderDetails = useSelector(state => state.orderDetails)
-    const { order, loading, error } = orderDetails
-    console.log(order);
-    const orderPay = useSelector(state => state.orderPay)
-    const { loading: loadingPay, success: successPay } = orderPay
+    }, [dispatch, referenceNum, order])
 
 
 
+
+   
 
 
     return (
@@ -38,9 +40,9 @@ const Success = () => {
             {loading ? <Loader /> : error ? <Message variant="dander">{error}</Message> :
 
                 <>
-               
-                <h1 className='text-success'>Paymant success {order._id}</h1>
-                    
+
+                    <h1 className='text-success'>Paymant success {order._id}</h1>
+
                     <h3>ORDER PLACED</h3>
                     <Row>
                         <Col md={8}>
@@ -63,9 +65,9 @@ const Success = () => {
                                         {order.shippingAddress.postalCode},
                                         {order.shippingAddress.country},
                                     </p>
-                                   
+
                                 </ListGroupItem>
-                         
+
 
                                 <ListGroupItem>
                                     <h2>Order items</h2>

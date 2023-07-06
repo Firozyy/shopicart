@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { productListReducer, productDetailsReducer } from './reducer/productReducer.js';
+import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer } from './reducer/productReducer.js';
 import { cartReducer } from './reducer/cartReducer.js';
-import { userDetailsReducer, userLoginReducer, userRegisteReducer, userupdateProfileReducer } from './reducer/userReducer.js';
+import { userDetailsReducer, userListReducer, userLoginReducer, userRegisteReducer, userRemoveReducer, userUpdateReducer, userupdateProfileReducer } from './reducer/userReducer.js';
 import { orderCreateReducer, orderDetailsReducer, orderListMyReducer, orderPayReducer } from './reducer/orderReducer.js';
 
 
@@ -45,7 +45,13 @@ const store = configureStore({
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay:orderPayReducer,
-    orderListMy:orderListMyReducer
+    orderListMy:orderListMyReducer,
+    userList:userListReducer,
+    userRemove:userRemoveReducer,
+    usersUpdate:userUpdateReducer,
+    productDelete:productDeleteReducer,
+    productCreate:productCreateReducer,
+    productUpdate:productUpdateReducer,
   },
   preloadedState: initialState,
 });

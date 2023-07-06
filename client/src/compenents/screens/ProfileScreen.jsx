@@ -49,7 +49,7 @@ const ProfileScreen = () => {
         }
     }
 
-    console.log(orders);
+   
     return (
         <Container className='screenSize'>
             <Row>

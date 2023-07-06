@@ -7,7 +7,6 @@ export const protect = asyncHandler(async (req, res, next) => {
 
     let token;
 
-
     if (req.headers.authrization && req.headers.authrization.startsWith("Bearer ")) {
         try {
             token = req.headers.authrization.split(" ")[1]
@@ -28,3 +27,13 @@ export const protect = asyncHandler(async (req, res, next) => {
 
 
 });
+
+
+export const adminMidleware = (req, res, next) => {
+    if (req.user && req.user.isAdmin) {
+        next()
+    } else {
+        res.status(401)
+        throw new Error("admin access only")
+    }
+}
