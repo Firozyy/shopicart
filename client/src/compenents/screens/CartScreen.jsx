@@ -28,7 +28,7 @@ const CartScreen = ({ match, location, history }) => {
   }, [dispatch, id, qty])
 
   const removeFromCartHandler = (id) => {
-    console.log(id);
+
     dispatch(removeFromCart(id))
 
   }
@@ -54,7 +54,7 @@ const CartScreen = ({ match, location, history }) => {
                 <ListGroup.Item>
                   <Row>
                     <Col md={2}>
-                      <Image src={item.image} alt={item.name} fluid rounded />
+                      <Image src={item.image.image_url} alt={item.name} fluid rounded />
                     </Col>
                     <Col md={3}>
                       <Link id='link' to={`/product/${item.product}`}>{item.name}</Link>

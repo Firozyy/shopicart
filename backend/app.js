@@ -6,7 +6,7 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({
-    extended: true
+    extended:true
 }));
 import cors from 'cors'
 app.use(cors({

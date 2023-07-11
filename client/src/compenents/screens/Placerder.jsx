@@ -19,12 +19,12 @@ const Placerder = () => {
         return (Math.round(num * 100) / 100).toFixed(2)
     }
 
-   const itemsPrice = addDecimals(
+    const itemsPrice = addDecimals(
         cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
     const shippingPrice = addDecimals(itemsPrice > 1000 ? 0 : 100)
     const taxPrice = addDecimals(Number((0.15 * itemsPrice).toFixed(2)))
-     const totalPrice = (
+    const totalPrice = (
         Number(itemsPrice) +
         Number(shippingPrice) +
         Number(taxPrice)
@@ -48,7 +48,7 @@ const Placerder = () => {
             itemsPrice: itemsPrice,
             taxPrice: taxPrice,
             shippingPrice: shippingPrice,
-            totalPrice:totalPrice
+            totalPrice: totalPrice
         }))
     };
 
@@ -88,7 +88,7 @@ const Placerder = () => {
                                         <ListGroupItem key={index}>
                                             <Row>
                                                 <Col md={1}>
-                                                    <Image src={item.image} alt={item.name} fluid rounded />
+                                                    <Image src={item.image.image_url} alt={item.name} fluid rounded />
                                                 </Col>
                                                 <Col >
                                                     <Link id='link' to={`/product/${item.product}`}>

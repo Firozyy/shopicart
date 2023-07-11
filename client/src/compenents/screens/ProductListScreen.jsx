@@ -12,7 +12,10 @@ import { listProducts, productCreate, productDelete } from "../../redux/action/p
 const ProductListScreen = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { products, error, loading } = useSelector(state => state.productList)
+    const  productList = useSelector(state => state.productList)
+    const { loading, error, products: data, } = productList
+    const { products, page, pages } = data
+
     const { userInfo } = useSelector(state => state.userLogin)
     const { success: successDelete, error: errorDelete, loading: loadingDelete } = useSelector(state => state.productDelete)
     const { success: successCreate, error: errorCreate, loading: loadingCreate, product: cretedProduct } = useSelector(state => state.productCreate)

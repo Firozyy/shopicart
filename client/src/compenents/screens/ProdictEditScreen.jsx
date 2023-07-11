@@ -2,7 +2,7 @@
 import FormContainer from '../FormContainer'
 import React, { useEffect, useState, } from 'react'
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { Button, Form, FormGroup, FormLabel, FormControl,  } from "react-bootstrap"
+import { Button, Form, FormGroup, FormLabel, FormControl, } from "react-bootstrap"
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../Loader';
 import Message from '../Message';
@@ -23,7 +23,7 @@ const ProdictEditScreen = () => {
     const [countInStock, setcountInStock] = useState(0)
     const [numReviews, setnumReviews] = useState(0)
     const [description, setdescription] = useState("")
-
+    const [ImagePrev, setImagePrev] = useState('')
     const navigate = useNavigate()
 
     // const redirect = location.search ? location.search.split("=")[1]:"/"
@@ -52,24 +52,37 @@ const ProdictEditScreen = () => {
             }
         }
 
-    }, [dispatch, product, successupdate,id])
+    }, [dispatch, product, successupdate, id])
 
-
+    const changeImageHnadler = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setImagePrev(reader.result);
+            setImage(file);
+        };
+    };
 
     const formSubmitHandler = (e) => {
         e.preventDefault()
+
+        const myForm = new FormData();
+
+
+        myForm.append("name", name)
+        myForm.append("price", price)
+        myForm.append("brand", brand)
+        myForm.append("category", category)
+        myForm.append("countInStock", countInStock)
+        myForm.append("description", description)
+        myForm.append("numReviews", numReviews)
+        myForm.append("file", image);
+
         //updateb product handler
-        dispatch(productUpdate({
-            _id:id,
-            name,
-            price,
-            brand,
-            category,
-            countInStock,
-            description,
-            numReviews,
-            image
-        }))
+   
+       
+        dispatch(productUpdate(myForm, id))
 
     }
     return (
@@ -107,8 +120,8 @@ const ProdictEditScreen = () => {
 
                             <FormGroup controlId='image'>
                                 <FormLabel>image</FormLabel>
-                                <FormControl type='text' value={image}
-                                    onChange={(e) => setImage(e.target.value)}  >
+                                <FormControl type='file'
+                                    onChange={changeImageHnadler}  >
                                 </FormControl>
                             </FormGroup>
 

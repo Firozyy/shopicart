@@ -1,42 +1,45 @@
 
 import React, { useEffect } from 'react'
-import { Card, Col, Container, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
+import { Button, Card, Col, Container, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useSearchParams } from "react-router-dom"
-import { getorderDetails, payOrder } from '../../redux/action/orderActions'
+import { Link, useParams, useSearchParams } from "react-router-dom"
+import { deliverOrder, getorderDetails } from '../../redux/action/orderActions'
 import Message from '../Message'
 import Loader from '../Loader'
-import { removeFromCart } from '../../redux/action/cartAction'
 
-const Success = () => {
+
+const OrderDetails = () => {
     const dispatch = useDispatch()
-    const seachQuery = useSearchParams()[0]
 
-    const referenceNum = seachQuery.get("reference")
+    const { id } = useParams()
 
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
+    const { userInfo } = useSelector(state => state.userLogin)
 
-    const orderPay = useSelector(state => state.orderPay)
-    const { loading: loadingPay, success: successPay } = orderPay
+    const { loading: loadingDeliver, error: deliverError, success } = useSelector(state => state.orderDelivary)
+
 
     useEffect(() => {
-       if(!successPay){
-        dispatch(payOrder(referenceNum))
-        dispatch(getorderDetails(referenceNum))
-       }
-       
+        if (success) {
+            dispatch({ type: "ORDER_DELIVERY_RESET" })
+        }
 
-
-        
-    
-
-     }, [dispatch, referenceNum, order])
+        dispatch(getorderDetails(id))
 
 
 
 
-   
+    }, [dispatch, id, success])
+
+
+
+    const deliverHandler = (e) => {
+        e.preventDefault()
+        dispatch(deliverOrder(id))
+    };
+
+
 
 
     return (
@@ -44,10 +47,7 @@ const Success = () => {
             {loading ? <Loader /> : error ? <Message variant="dander">{error}</Message> :
 
                 <>
-
-                    <h1 className='text-success'>Paymant success {order._id}</h1>
-
-                    <h3>ORDER PLACED</h3>
+                    <h1>Order{order._id}</h1>
                     <Row>
                         <Col md={8}>
                             <ListGroup variant='flush'>
@@ -69,9 +69,26 @@ const Success = () => {
                                         {order.shippingAddress.postalCode},
                                         {order.shippingAddress.country},
                                     </p>
-
+                                    {order.isDelivered ? (
+                                        <Message variant='success'>
+                                            Delivered on {order.deliveredAt}
+                                        </Message>
+                                    ) : (
+                                        <Message variant='danger'>Not Delivered</Message>
+                                    )}
                                 </ListGroupItem>
-
+                                <ListGroupItem>
+                                    <h2>Payment Method</h2>
+                                    <p>
+                                        <strong>Method: </strong>
+                                        {order.paymentMethod}
+                                    </p>
+                                    {order.isPaid ? (
+                                        <Message variant='success'>Paid on {order.paidAt}</Message>
+                                    ) : (
+                                        <Message variant='danger'>Not Paid</Message>
+                                    )}
+                                </ListGroupItem>
 
                                 <ListGroupItem>
                                     <h2>Order items</h2>
@@ -135,7 +152,21 @@ const Success = () => {
                                             <Col>₹{order.totalPrice}</Col>
                                         </Row>
                                     </ListGroup.Item>
+                                    {loadingDeliver && <Loader />}
+                                    {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                        <ListGroup.Item>
+                                            <Button
+                                                type='button'
+                                                className='btn-block'
 
+                                                onClick={deliverHandler}
+                                            >
+                                                Marked as Delivered
+                                            </Button>
+                                        </ListGroup.Item>
+                                    )
+
+                                    }
 
                                 </ListGroup>
                             </Card>
@@ -143,12 +174,14 @@ const Success = () => {
                     </Row>
                 </>
             }
-
+     
         </Container>
     )
 }
 
 
-export default Success
 
 
+
+
+export default OrderDetails

@@ -1,12 +1,12 @@
 import { server } from "../store.js";
 import axios from "axios"
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (pageNumber) => async (dispatch) => {
 
 
     try {
         dispatch({ type: "PRODUCT_LIST_REQUEST" });
-        const { data } = await axios.get(`${server}/products`, {
+        const { data } = await axios.get(`${server}/products?pageNumber=${pageNumber}`, {
 
             withCredentials: true,
 
@@ -22,6 +22,28 @@ export const listProducts = () => async (dispatch) => {
         })
     }
 };
+
+export const searchProducts = (keyword) => async (dispatch) => {
+    console.log(keyword);
+    
+        try {
+            dispatch({ type: "PRODUCT_SEARCH_REQUEST" });
+            const { data } = await axios.get(`${server}/products/searach?keyword=${keyword}`, {
+    
+                withCredentials: true,
+    
+            });
+            dispatch({ type: "PRODUCT_SEARCH_SUCCESS", payload: data })
+    
+        } catch (error) {
+            dispatch({
+                type: "PRODUCT_SEARCH_FAIL",
+                payload: error.response && error.response.data.message ?
+                    error.response.data.message : error.message
+    
+            })
+        }
+    };
 export const listProductsDetails = (id) => async (dispatch) => {
 
 
@@ -106,16 +128,16 @@ export const productCreate = () => async (dispatch, getState) => {
 };
 
 
-export const productUpdate = (product) => async (dispatch, getState) => {
-console.log(product);
+export const productUpdate = (product, id) => async (dispatch, getState) => {
+
 
     try {
         dispatch({ type: "PRODUCT_UPDATE_REQUEST" });
 
         const { userLogin: { userInfo } } = getState()
-        const { data } = await axios.put(`${server}/${product._id}`, product, {
+        const { data } = await axios.put(`${server}/${id}`, product, {
             headers: {
-                "Content-Type": 'application/json',
+                "Content-Type": 'multipart/form-data',
                 authrization: `Bearer ${userInfo.token}  `
             },
             withCredentials: true,
@@ -127,6 +149,32 @@ console.log(product);
     } catch (error) {
         dispatch({
             type: "PRODUCT_UPDATE_FAIL", payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+        })
+    }
+};
+
+export const createProductReview = (productid,review) => async (dispatch, getState) => {
+
+console.log(review);
+    try {
+        dispatch({ type: "PRODUCT_REVIEW_CREATE_REQUEST" });
+
+        const { userLogin: { userInfo } } = getState()
+     await axios.post(`${server}/products/${productid}/reviews`,review, {
+            headers: {
+                "Content-Type": 'application/json',
+                authrization: `Bearer ${userInfo.token}  `
+            },
+            withCredentials: true,
+
+        });
+
+        dispatch({ type: "PRODUCT_REVIEW_CREATE_SUCCESS"})
+
+    } catch (error) {
+        dispatch({
+            type: "PRODUCT_REVIEW_CREATE_FAIL", payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
         })
     }

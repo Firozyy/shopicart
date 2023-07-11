@@ -20,8 +20,8 @@ export const checkout = asyncHandler(
 
 export const paymentverification = asyncHandler(async (req, res) => {
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-        req.body;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
     const orderId = req.params.id
 
 
@@ -47,7 +47,7 @@ export const paymentverification = asyncHandler(async (req, res) => {
 
         res.redirect(
             `http://localhost:3000/paymentsuccess?reference=${orderId}`
-               
+
         );
     } else {
         res.send('failed')
