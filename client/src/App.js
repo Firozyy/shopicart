@@ -26,6 +26,7 @@ import OrderDetails from './compenents/screens/OrderDetails';
 
 import SearchScreen from './compenents/screens/SearchEngine';
 import SearchEngine from './compenents/screens/SearchEngine';
+import CreateProducrScreen from './compenents/screens/CreateProducrScreen';
 const App = () => {
   return (
     <Roter>
@@ -54,9 +55,10 @@ const App = () => {
         <Route path='/admin/product/:id/edit' element={<ProdictEditScreen />} exact />
         <Route path='/admin/orderList' element={<OrdersListScreen />} exact />
         <Route path='/admin/orderdetails/:id' element={<OrderDetails />} exact />
+        <Route path='/admin/createProduct' element={<CreateProducrScreen />} exact />
 
         <Route path='/search/:keyword' element={<SearchEngine />} />
-
+        
 
 
       </Routes>

@@ -3,7 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import React, { useEffect, } from 'react'
 import { useNavigate } from "react-router-dom"
-import { Row, Col, Button, Table, Container, } from "react-bootstrap"
+import { Row, Col, Button, Table, Container, Spinner, } from "react-bootstrap"
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../Loader';
 import Message from '../Message';
@@ -26,9 +26,7 @@ const ProductListScreen = () => {
             navigate("/login")
 
         }
-        if (successDelete) {
-            navigate(`/admin/product${cretedProduct._id}/edit`)
-        } else {
+       else {
             dispatch(listProducts())
         }
 
@@ -39,11 +37,11 @@ const ProductListScreen = () => {
     }
 
     const createProductHandler = () => {
-        dispatch(productCreate())
+    navigate("/admin/createProduct")
     }
 
     return (
-        <Container>
+        <Container className="screenSize">
             <Row className='align-items-center'>
                 <Col>
                     <h1>Products</h1>
@@ -54,11 +52,11 @@ const ProductListScreen = () => {
                     </Button>
                 </Col>
             </Row>
-            {loadingDelete && <Loader />}
+        
             {errorDelete && <Message variant={'danger'}>{errorDelete}</Message>}
-            {loadingCreate && <Loader />}
-            {errorCreate && <Message variant={'danger'}>{errorCreate}</Message>}
-            {loading ? <Loader /> : error ? <Message variant={'danger'}>{error}</Message> : (
+        
+     
+            { loading || loadingCreate ? <Loader /> :  error ? <Message variant={'danger'}>{error}</Message> : (
                 <Table striped hover responsive bordered>
                     <thead>
                         <tr>
@@ -71,7 +69,7 @@ const ProductListScreen = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map(item => (
+                        {products && products.map(item => (
                             <tr key={item._id}>
                                 <td>{item._id}</td>
                                 <td>{item.name}</td>
@@ -88,8 +86,10 @@ const ProductListScreen = () => {
                                         variant='danger'
                                         className='btn-sm'
                                         onClick={() => deleteHandler(item._id)}
+                                       disabled={loadingDelete}
                                     >
-                                        <i className='fas fa-trash'></i>
+                                       {loadingDelete ? <Spinner animation="border" variant="secondary" size="sm"/>: <i className='fas fa-trash'></i>}
+                                       
                                     </Button>
                                 </td>
                             </tr>

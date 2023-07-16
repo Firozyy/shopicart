@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, deletproduct, getProduct, getProducts, updateProdut, createProductReview, searchProducts } from "../controler/productControler.js";
+import { createProduct, deletproduct, getProduct, getProducts, updateProdut, createProductReview, searchProducts, getTopProducts } from "../controler/productControler.js";
 import { adminMidleware, protect } from "../midlewares/authMidleware.js";
 import singleUpload from "../midlewares/multer.js";
 
@@ -15,5 +15,5 @@ router.route('/:id').get(getProduct)
 
 router.route('/products/:id/reviews').post(protect, createProductReview);
 
-
+router.route('/products/top').get(getTopProducts)
 export default router

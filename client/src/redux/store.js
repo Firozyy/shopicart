@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer, productReviewCreateReducer, productSearchtReducer } from './reducer/productReducer.js';
+import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer, productReviewCreateReducer, productSearchtReducer, topProductReducer } from './reducer/productReducer.js';
 import { cartReducer } from './reducer/cartReducer.js';
 import { userDetailsReducer, userListReducer, userLoginReducer, userRegisteReducer, userRemoveReducer, userUpdateReducer, userupdateProfileReducer } from './reducer/userReducer.js';
 import { orderCreateReducer, orderDelivaryReducer, orderDetailsReducer, orderListMyReducer, orderListReducer, orderPayReducer } from './reducer/orderReducer.js';
@@ -55,7 +55,8 @@ const store = configureStore({
     orderList:orderListReducer,
     orderDelivary:orderDelivaryReducer,
     productReviewCreate:productReviewCreateReducer,
-    productSearcht:productSearchtReducer
+    productSearcht:productSearchtReducer,
+    topProduct:topProductReducer
   },
   preloadedState: initialState,
 });

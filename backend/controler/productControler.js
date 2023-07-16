@@ -93,13 +93,18 @@ export const createProduct = asyncHandler(async (req, res) => {
   const {
     name,
     price,
-    user,
+
     brand,
     category,
     countInStock,
     description,
   } = req.body
-console.log(req.body);
+
+  if (!name || !price || !brand || !category || !countInStock || !description) {
+    res.status(404)
+    throw new Error("please fill  all fields")
+  }
+
   const fileUri = getDataUri(req.file);
 
   const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
@@ -176,7 +181,7 @@ export const updateProdut = asyncHandler(async (req, res) => {
 // useronly
 export const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body
-  console.log(req.body);
+
   const product = await Product.findById(req.params.id)
 
   if (product) {
@@ -210,4 +215,18 @@ export const createProductReview = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error('Product not found')
   }
+})
+
+
+
+//@desc fetch top product 
+// http://localhost:8080/products/top
+// public
+export const getTopProducts = asyncHandler(async (req, res) => {
+
+
+  const product = await Product.find().sort({ rating: -1 }).limit(2)
+  res.status(201).json(product)
+
+
 })

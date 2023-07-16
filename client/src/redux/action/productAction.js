@@ -99,16 +99,16 @@ export const productDelete = (id) => async (dispatch, getState) => {
 };
 
 
-export const productCreate = () => async (dispatch, getState) => {
+export const productCreate = (newproduct) => async (dispatch, getState) => {
 
 
     try {
         dispatch({ type: "PRODUCT_Create_REQUEST" });
 
         const { userLogin: { userInfo } } = getState()
-        const { data } = await axios.post(`${server}/products`, {
+        const { data } = await axios.post(`${server}/products`,newproduct, {
             headers: {
-                "Content-Type": 'application/json',
+                "Content-Type": 'multipart/form-data',
                 authrization: `Bearer ${userInfo.token}  `
             },
             withCredentials: true,
@@ -156,7 +156,7 @@ export const productUpdate = (product, id) => async (dispatch, getState) => {
 
 export const createProductReview = (productid,review) => async (dispatch, getState) => {
 
-console.log(review);
+
     try {
         dispatch({ type: "PRODUCT_REVIEW_CREATE_REQUEST" });
 
@@ -179,3 +179,26 @@ console.log(review);
         })
     }
 };
+
+export const topProductsAction = (pageNumber) => async (dispatch) => {
+
+
+    try {
+        dispatch({ type: "TOP_PRODUCT_REQUEST" });
+        const { data } = await axios.get(`${server}/products/top`, {
+
+            withCredentials: true,
+
+        });
+        dispatch({ type: "TOP_PRODUCT_SUCCESS", payload: data })
+
+    } catch (error) {
+        dispatch({
+            type: "TOP_PRODUCT_FAIL",
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+
+        })
+    }
+};
+
