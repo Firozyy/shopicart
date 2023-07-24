@@ -2,7 +2,7 @@
 
 import FormContainer from '../FormContainer'
 import React, { useState, } from 'react'
-import {  useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Button, Form, Container, FormGroup, FormLabel, FormControl, } from "react-bootstrap"
 import { useSelector, useDispatch } from 'react-redux';
 import { saveShippingAddress } from '../../redux/action/cartAction';
@@ -10,9 +10,9 @@ import CheckoutSteps from '../CheckoutSteps';
 
 
 const ShippingScreen = () => {
-  const {shippingAddress} = useSelector(state => state.cart)
-  const dispatch =useDispatch()
-const navigate= useNavigate()
+  const { shippingAddress } = useSelector(state => state.cart)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [address, setAddress] = useState(shippingAddress.address)
   const [city, setCity] = useState(shippingAddress.city)
@@ -21,13 +21,13 @@ const navigate= useNavigate()
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(saveShippingAddress({address,city,postalCode,country}))
+    dispatch(saveShippingAddress({ address, city, postalCode, country }))
     navigate('/payment')
   }
   return (
     <Container className='screenSize'>
       <FormContainer>
-      <CheckoutSteps step1 step2/>
+        <CheckoutSteps step1 step2 />
         <h1>Shipping</h1>
 
         <Form onSubmit={submitHandler}>
