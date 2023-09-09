@@ -17,9 +17,6 @@ app.use(cors({
 }))
 
 
-app.get('/', (req, res) => {
-    res.send("testing")
-})
 
 import productRoute from "./Rout/productRoute.js"
 import userRoute from "./Rout/userRoutes.js"

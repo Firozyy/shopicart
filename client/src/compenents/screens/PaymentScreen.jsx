@@ -24,7 +24,7 @@ const PaymentScreen = () => {
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(savePaymentMethod(paymentMethod))
+        dispatch(savePaymentMethod("Razorpay"))
         navigate('/placeOrder')
     }
     return (

@@ -39,33 +39,60 @@ const OrderScreen = () => {
     const checkoutHandler = async (amount, orderId) => {
 
 
-        const { data } = await axios.post("http://localhost:8080/api/v1/checkout", {
+        var { data } = await axios.post("http://localhost:8080/api/v1/initiatepayment", {
             amount
         })
 
-        const options = {
-            key: "rzp_test_0xa532o86yAcos",
-            amount: data.order.amount,
-            currency: "INR",
-            name: "Shopicart",
-            description: "Tutorial of RazorPay",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWKBVR7dSCaDrMbCogcL0PTxvHjMinJgwgo4ybqt4&s",
-            order_id: data.order.id,
-            callback_url: `http://localhost:8080/api/v1/paymentverification/${orderId}`,
-            prefill: {
-                name: userInfo.name,
-                email: userInfo.email,
-
+    
+            //use window.bolt.launch if you face an error in bolt.launch
+            window.bolt(data, {
+              responseHandler: function (response) {
+              // your payment response Code goes here
+              fetch(`http://localhost:8080/api/v1/payment/payumoney/response`, {
+                method: 'POST',
+                headers: {
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(response.response)
+              })
+              .then(function (a) {
+                 return a.json(); 
+               })
+              .then(function (json) {
+                console.log(json);
+               });
             },
-            notes: {
-                "address": "Razorpay Corporate Office"
-            },
-            theme: {
-                "color": "#121212"
+            catchException: function (response) {
+              // the code you use to handle the integration errors goes here
+              // Make any UI changes to convey the error to the user
             }
-        };
-        const razor = new window.Razorpay(options);
-        razor.open();
+          });
+          
+
+        // const options = {
+        //     key: "rzp_test_0xa532o86yAcos",
+        //     amount: data.order.amount,
+        //     currency: "INR",
+        //     name: "Shopicart",
+        //     description: "Tutorial of RazorPay",
+        //     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWKBVR7dSCaDrMbCogcL0PTxvHjMinJgwgo4ybqt4&s",
+        //     order_id: data.order.id,
+        //     callback_url: `http://localhost:8080/api/v1/paymentverification/${orderId}`,
+        //     prefill: {
+        //         name: userInfo.name,
+        //         email: userInfo.email,
+
+        //     },
+        //     notes: {
+        //         "address": "Razorpay Corporate Office"
+        //     },
+        //     theme: {
+        //         "color": "#121212"
+        //     }
+        // };
+        // const razor = new window.Razorpay(options);
+        // razor.open();
     }
 
     return (

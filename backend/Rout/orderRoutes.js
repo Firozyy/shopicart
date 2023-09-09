@@ -1,7 +1,7 @@
 import express from "express";
 import { addOederItems, getOrderById, updateOrderToPaid, allOrders, getOrders, updateOrderToDeliverd } from "../controler/orderControler.js";
 import { adminMidleware, protect } from "../midlewares/authMidleware.js";
-import { paymentverification, checkout, } from "../controler/paymantControler.js"
+import { paymentverification, checkout, initiatepayment, payUMoneyPaymentResponse, } from "../controler/paymantControler.js"
 
 const router = express.Router();
 router.route('/order/updateorder').put(protect, updateOrderToPaid);
@@ -16,5 +16,6 @@ router.route('/orders/getallOrders').get(protect,adminMidleware,getOrders)
 
 router.route('/order/delivered/:id').put(protect,adminMidleware, updateOrderToDeliverd);
 
-
+router.route('/initiatepayment').post(initiatepayment);
+router.route('/payment/payumoney/response').post(payUMoneyPaymentResponse);
 export default router
